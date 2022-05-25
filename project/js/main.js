@@ -5,19 +5,28 @@ class ProductList {
         this.container = container;//куда запихаем товары
         this.products = []//список покупок
         this._getProducts();//создадим функцию извлечения продуктов
+           
         this.render();//как покажем
     }
     _getProducts() {//достанем полку
-        this.products = [
-            { id: 1, title: 'Notebook', price: 2000, img: '../src/img/noutbuk.jpg' },
-            { id: 2, title: 'Mouse', price: 20, img: '../src/img/mouse.jpg' },
-            { id: 3, title: 'Keyboard', price: 200, img: '../src/img/keyboard.jpg' },
-            { id: 4, title: 'Gamepad', price: 50, img: '../src/img/gamepad.jpg' },
-            { id: 5, title: 'Без рисунка', price: 50 },
+        return fetch("./src/json/products.json")
+            .then(result => result.json())
+            .then(data=>{
+                console.log(data);
+            })
+            .catch(error=>{
+                console.log(error);
+            });
+        // this.products = [
+            // { id: 1, title: 'Notebook', price: 2000, img: '../src/img/noutbuk.jpg' },
+            // { id: 2, title: 'Mouse', price: 20, img: '../src/img/mouse.jpg' },
+            // { id: 3, title: 'Keyboard', price: 200, img: '../src/img/keyboard.jpg' },
+            // { id: 4, title: 'Gamepad', price: 50, img: '../src/img/gamepad.jpg' },
+            // { id: 5, title: 'Без рисунка', price: 50 },
             // {id: 6, title: 'Без рисунка и цены',},
             // {id:7},
-        ];
-    }
+        // ];
+    }//_getProducts
     render() {//к показу!
         const block = document.querySelector(this.container);//Найдём где показать
         for (let product of this.products) {
