@@ -97,14 +97,14 @@ class ProductList extends List {
 
 //Элемент корзины
 class CardItem extends Item {
-    constructor(product, img = 'https://placehold.it/50x100') {
+    constructor(product, img = 'src/img/nothing.jpg') {
         super(product, img);
         this.quantity = 1;
     }
     render() {
         return `<div class="cart-item" data-id="${this.id_product}">
                 <div class="product-bio">
-                <img src="${this.img}" alt="Some image">
+                <img src="${this.img}" width="50" height="50" alt="Some image">
                 <div class="product-desc">
                 <p class="product-title">${this.product_name}</p>
                 <p class="product-quantity">Quantity: ${this.quantity}</p>
@@ -124,20 +124,42 @@ class CardItem extends Item {
 
 //карточка корзины
 class Card {
-    constructor() {
+    constructor(conteiner='.cart-block') {
         this.goods = [];
         this._init();
+        this.container=conteiner;
     }
 
     addItem(good) {
-        this.goods.push(new CardItem(good));
-        console.log(this.goods)
+        
+        //console.log(good.id_product);
+        if(this.find(good.id_product)){
+            this.goods[this.find(good.id_product)-1].quantity+=1;
+        }
+        else{
+            this.goods.push(new CardItem(good));
+        }
         this.cardUpdate();
     }
 
-    cardUpdate(){
-        let bascket = document.querySelector('.cart-block');
-        for (let item of this.goods){
+
+    find(id) {
+        for (let i=0; i< this.goods.length;i++) {
+            if (this.goods[i].id_product==id){
+                console.log(this.goods[i].id_product);
+                return i+1;
+            }
+        }
+        return false;
+    }
+
+    
+
+    cardUpdate() {
+        let bascket = document.querySelector(this.container);
+        bascket.replaceChildren();
+        //console.log(this.goods);
+        for (let item of this.goods) {
             bascket.innerHTML += item.render();
         }
     }
@@ -146,7 +168,7 @@ class Card {
 
         document.querySelector('.btn-cart').addEventListener('click', () => {
             //console.log('basket pressed')
-            document.querySelector('.cart-block').classList.toggle('invisible');
+            document.querySelector(this.container).classList.toggle('invisible');
         });
     }
 }
