@@ -4,16 +4,19 @@ class ProductList {
     constructor(container = '.products') {
         this.container = container;//куда запихаем товары
         this.products = []//список покупок
-        this._getProducts();//создадим функцию извлечения продуктов
-           
-        this.render();//как покажем
+        this._getProducts()
+            .then(data=>{
+            //  console.log(data);
+            this.products=data;
+            this.render();//как покажем
+//+            console.log(this.products)
+        });//создадим функцию извлечения продуктов
+        console.log(this.products)  
+        //this.render();//как покажем
     }
     _getProducts() {//достанем полку
         return fetch("./src/json/products.json")
-            .then(result => result.json())
-            .then(data=>{
-                console.log(data);
-            })
+            .then(result => result.json())           
             .catch(error=>{
                 console.log(error);
             });
@@ -27,9 +30,12 @@ class ProductList {
             // {id:7},
         // ];
     }//_getProducts
+
     render() {//к показу!
         const block = document.querySelector(this.container);//Найдём где показать
+        
         for (let product of this.products) {
+            console.log(product)
             const item = new ProductItem(product);//Заделали продукт
             block.innerHTML += item.render();//Подкинем к показу к выбранному контейнеру
         }
@@ -40,7 +46,7 @@ class ProductList {
 
 //Наши товары
 class ProductItem {
-    constructor(product, img = '../src/img/nothing.jpg') {
+    constructor(product, img = 'src/img/nothing.jpg') {
         this.id = product.id;
         this.title = product.title;
         this.price = product.price;

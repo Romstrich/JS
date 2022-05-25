@@ -2,22 +2,22 @@
  {  "id": 1,
     "title": "Notebook",
     "price": 2000,
-    "img": "../src/img/noutbuk.jpg"
+    "img": "src/img/noutbuk.jpg"
  },
  {  "id": 2, 
     "title": "Mouse",
     "price": 20,
-    "img": "../src/img/mouse.jpg"
+    "img": "src/img/mouse.jpg"
  },
  {  "id": 3, 
     "title": "Keyboard", 
     "price": 200, 
-    "img": "../src/img/keyboard.jpg"
+    "img": "src/img/keyboard.jpg"
  },
  {  "id": 4, 
     "title": "Gamepad",
     "price": 50, 
-    "img": "../src/img/gamepad.jpg" 
+    "img": "src/img/gamepad.jpg" 
  },
  {  "id": 5, 
     "title": "Без рисунка", 
