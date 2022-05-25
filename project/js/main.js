@@ -142,6 +142,17 @@ class Card {
         this.cardUpdate();
     }
 
+    removeItem(position){
+        if (this.goods[position-1].quantity>1){
+            console.log('iwill delete 1 quantity')
+            this.goods[position-1].quantity-=1;
+        }
+        else{
+            this.goods.splice(position-1,1);
+        }
+        this.cardUpdate();
+    }
+
 
     find(id) {
         for (let i=0; i< this.goods.length;i++) {
@@ -161,6 +172,7 @@ class Card {
         //console.log(this.goods);
         for (let item of this.goods) {
             bascket.innerHTML += item.render();
+            
         }
     }
 
@@ -169,6 +181,14 @@ class Card {
         document.querySelector('.btn-cart').addEventListener('click', () => {
             //console.log('basket pressed')
             document.querySelector(this.container).classList.toggle('invisible');
+        });
+
+        document.querySelector('.cart-block').addEventListener('click', pressed => {
+            if (pressed.target.classList.contains('del-btn')) {
+                let id = pressed.target.getAttribute('data-id');
+                console.log(`will delete one ${this.find(id)}`);
+                this.removeItem(this.find(id));
+            }
         });
     }
 }
