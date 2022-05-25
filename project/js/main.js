@@ -122,6 +122,7 @@ class Card{
     _init(){
         document.querySelector('.btn-cart').addEventListener('click',()=>{
             console.log('basket pressed')
+            document.querySelector('.cart-block').classList.toggle('invisible');
         });
     }  
 }
