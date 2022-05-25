@@ -4,7 +4,7 @@ const API_basket = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-
 
 
 //единица товара
-class Item{
+class Item {
     constructor(product, img = 'src/img/nothing.jpg') {
         this.id_product = product.id_product;
         this.product_name = product.product_name;
@@ -20,11 +20,11 @@ class Item{
 //Наши товары для страницы
 class ProductItem extends Item {
     constructor(product, img = 'src/img/nothing.jpg') {
-        super(product,img)
+        super(product, img)
     }
 
     render() {
-        console.log(`отрисовка товара ${this.id}`)
+        //console.log(`отрисовка товара ${this.id}`)
         return `<div class="product-item">
                 <img src="${this.img}" width="150" height="150">
                 <h3>${this.product_name}</h3>
@@ -36,49 +36,59 @@ class ProductItem extends Item {
 
 //Загрузка нужного списка
 class List {
-    constructor(url="./src/json/products.json") {
+    constructor(url = "./src/json/products.json") {
         //куда запихаем товары
         this.products = [];//список покупок
-        this.url=url;
+        this.url = url;
         this._getProducts()
-            .then(data=>{
-            this.products=data;
-            this.render();
-        });//создадим функцию извлечения продуктов
-        console.log(this.products)  
+            .then(data => {
+                this.products = data;
+                this.render();
+            });//создадим функцию извлечения продуктов
+        console.log(this.products)
         //this.render();//как покажем
     }
 
     _getProducts() {//достанем полку
         return fetch(this.url)
-            .then(result => result.json())           
-            .catch(error=>{
+            .then(result => result.json())
+            .catch(error => {
                 console.log(error);
             });
     }//_getProducts   
 }
 
 //список для старницы
-class ProductList extends List{
-    constructor(card,container = '.products',url){
+class ProductList extends List {
+    constructor(card, container = '.products', url) {
         super(url)
         this.container = container;
-        this.card=card;//типо карточку корзины написали
-        
+        this.card = card;//типо карточку корзины написали
+
+    }
+
+    find(id) {
+        for (let item of this.products) {
+            if (item.id_product == id) {
+                return item;
+            }
+        }
     }
 
     render() {//к показу!
         const block = document.querySelector(this.container);//Найдём где показать
-        
+
         for (let product of this.products) {
             console.log(product)
             const item = new ProductItem(product);//Заделали продукт
             block.innerHTML += item.render();//Подкинем к показу к выбранному контейнеру
         }
-        document.querySelector(this.container).addEventListener('click',pressed=>{
-            if (pressed.target.classList.contains('buy-btn')){
-                this.card.someWrite(pressed.target.getAttribute('data-id'))
-            console.log(`pressed ${pressed.target.getAttribute('data-id')}`)
+        document.querySelector(this.container).addEventListener('click', pressed => {
+            if (pressed.target.classList.contains('buy-btn')) {
+                let id = pressed.target.getAttribute('data-id');
+                this.card.addItem(this.find(id))
+                //console.log(this.find(id))
+                //console.log(`pressed ${pressed.target.getAttribute('data-id')}`)
             }
         });
     }
@@ -86,12 +96,12 @@ class ProductList extends List{
 
 
 //Элемент корзины
-class CardItem extends Item{
-    constructor(product, img = 'https://placehold.it/50x100'){
-        super(el, img);
-        this.quantity = el.quantity;
+class CardItem extends Item {
+    constructor(product, img = 'https://placehold.it/50x100') {
+        super(product, img);
+        this.quantity = 1;
     }
-    render(){
+    render() {
         return `<div class="cart-item" data-id="${this.id_product}">
                 <div class="product-bio">
                 <img src="${this.img}" alt="Some image">
@@ -102,41 +112,43 @@ class CardItem extends Item{
             </div>
             </div>
             <div class="right-block">
-                <p class="product-price">$${this.quantity*this.price}</p>
+                <p class="product-price">$${this.quantity * this.price}</p>
                 <button class="del-btn" data-id="${this.id_product}">&times;</button>
             </div>
             </div>`
-        }
+    }
 }
 
-class Basket{
-    constructor(){
-        this.goods=[];
-    }
 
-    addProduct(product){
-        console.log('new good')
-    }
-    
-}
 
 
 //карточка корзины
-class Card{
-    constructor(){    
+class Card {
+    constructor() {
+        this.goods = [];
         this._init();
     }
-    
-    someWrite(text='everything'){
-        document.querySelector('.cart-block').innerHTML+=`<p>${text}</p`
+
+    addItem(good) {
+        this.goods.push(new CardItem(good));
+        console.log(this.goods)
+        this.cardUpdate();
     }
 
-    _init(){
-        document.querySelector('.btn-cart').addEventListener('click',()=>{
+    cardUpdate(){
+        let bascket = document.querySelector('.cart-block');
+        for (let item of this.goods){
+            bascket.innerHTML += item.render();
+        }
+    }
+
+    _init() {
+
+        document.querySelector('.btn-cart').addEventListener('click', () => {
             //console.log('basket pressed')
             document.querySelector('.cart-block').classList.toggle('invisible');
         });
-    }  
+    }
 }
 
 
