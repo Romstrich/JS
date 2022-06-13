@@ -18,8 +18,13 @@ const app = new Vue({
                 .catch(error => {
                     console.log(error);
                 })
-        }
-    },
+        },
+        addProduct(product){
+            console.log(product.id_product);
+         }
+        },
+        
+
     mounted(){
         //метод отработки после загрузки приложения
         //в нашем случае вгураем списки
