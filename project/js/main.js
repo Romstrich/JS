@@ -3,6 +3,7 @@ const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-a
 const app = new Vue({
     el: '#app',
     data: {
+        //подвозьмём с образца
         catalogUrl: '/catalogData.json',
         products: [],
         filtered: [],
@@ -11,8 +12,17 @@ const app = new Vue({
         show: false
     },
     methods: {
-        
+        getJson(url){//подрузка файла, как раньше, только теперь с гитахаба
+            return fetch(url)
+                .then(result => result.json())//работа с промисом
+                .catch(error => {
+                    console.log(error);
+                })
+        }
+    },
     mounted(){
+        //метод отработки после загрузки приложения
+        //в нашем случае вгураем списки
        this.getJson(`${API + this.catalogUrl}`)
            .then(data => {
                for(let el of data){
