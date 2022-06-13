@@ -1,201 +1,29 @@
-//Список товаров
-const API_all = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses/catalogData.json';
-const API_basket = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses/addToBasket.json';
+const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 
-
-//единица товара
-class Item {
-    constructor(product, img = 'src/img/nothing.jpg') {
-        this.id_product = product.id_product;
-        this.product_name = product.product_name;
-        this.price = product.price;
-        if (product.img) {//если  идёт картинка
-            this.img = product.img;//ставим картинку
-        } else {//если картинки ссобой нет
-            this.img = img;//берём какая есть всегда
-        }
-    }
-}
-
-//Наши товары для страницы
-class ProductItem extends Item {
-    constructor(product, img = 'src/img/nothing.jpg') {
-        super(product, img)
-    }
-
-    render() {
-        //console.log(`отрисовка товара ${this.id}`)
-        return `<div class="product-item">
-                <img src="${this.img}" width="150" height="150">
-                <h3>${this.product_name}</h3>
-                <p>${this.price}</p>
-                <button class="buy-btn" data-id="${this.id_product}">Купить</button>
-            </div>`
-    }
-}
-
-//Загрузка нужного списка
-class List {
-    constructor(url = "./src/json/products.json") {
-        //куда запихаем товары
-        this.products = [];//список покупок
-        this.url = url;
-        this._getProducts()
-            .then(data => {
-                this.products = data;
-                this.render();
-            });//создадим функцию извлечения продуктов
-        console.log(this.products)
-        //this.render();//как покажем
-    }
-
-    _getProducts() {//достанем полку
-        return fetch(this.url)
-            .then(result => result.json())
-            .catch(error => {
-                console.log(error);
-            });
-    }//_getProducts   
-}
-
-//список для старницы
-class ProductList extends List {
-    constructor(card, container = '.products', url) {
-        super(url)
-        this.container = container;
-        this.card = card;//типо карточку корзины написали
-
-    }
-
-    find(id) {
-        for (let item of this.products) {
-            if (item.id_product == id) {
-                return item;
-            }
-        }
-    }
-
-    render() {//к показу!
-        const block = document.querySelector(this.container);//Найдём где показать
-
-        for (let product of this.products) {
-            console.log(product)
-            const item = new ProductItem(product);//Заделали продукт
-            block.innerHTML += item.render();//Подкинем к показу к выбранному контейнеру
-        }
-        document.querySelector(this.container).addEventListener('click', pressed => {
-            if (pressed.target.classList.contains('buy-btn')) {
-                let id = pressed.target.getAttribute('data-id');
-                this.card.addItem(this.find(id))
-                //console.log(this.find(id))
-                //console.log(`pressed ${pressed.target.getAttribute('data-id')}`)
-            }
-        });
-    }
-}
-
-
-//Элемент корзины
-class CardItem extends Item {
-    constructor(product, img = 'src/img/nothing.jpg') {
-        super(product, img);
-        this.quantity = 1;
-    }
-    render() {
-        return `<div class="cart-item" data-id="${this.id_product}">
-                <div class="product-bio">
-                <img src="${this.img}" width="50" height="50" alt="Some image">
-                <div class="product-desc">
-                <p class="product-title">${this.product_name}</p>
-                <p class="product-quantity">Quantity: ${this.quantity}</p>
-            <p class="product-single-price">$${this.price} each</p>
-            </div>
-            </div>
-            <div class="right-block">
-                <p class="product-price">$${this.quantity * this.price}</p>
-                <button class="del-btn" data-id="${this.id_product}">&times;</button>
-            </div>
-            </div>`
-    }
-}
-
-
-
-
-//карточка корзины
-class Card {
-    constructor(conteiner='.cart-block') {
-        this.goods = [];
-        this._init();
-        this.container=conteiner;
-    }
-
-    addItem(good) {
+const app = new Vue({
+    el: '#app',
+    data: {
+        catalogUrl: '/catalogData.json',
+        products: [],
+        filtered: [],
+        imgCatalog: 'https://via.placeholder.com/200x150',
+        userSearch: '',
+        show: false
+    },
+    methods: {
         
-        //console.log(good.id_product);
-        if(this.find(good.id_product)){
-            this.goods[this.find(good.id_product)-1].quantity+=1;
-        }
-        else{
-            this.goods.push(new CardItem(good));
-        }
-        this.cardUpdate();
+    mounted(){
+       this.getJson(`${API + this.catalogUrl}`)
+           .then(data => {
+               for(let el of data){
+                   this.products.push(el);
+               }
+           });
+        this.getJson(`getProducts.json`)
+            .then(data => {
+                for(let el of data){
+                    this.products.push(el);
+                }
+            })
     }
-
-    removeItem(position){
-        if (this.goods[position-1].quantity>1){
-            console.log('iwill delete 1 quantity')
-            this.goods[position-1].quantity-=1;
-        }
-        else{
-            this.goods.splice(position-1,1);
-        }
-        this.cardUpdate();
-    }
-
-
-    find(id) {
-        for (let i=0; i< this.goods.length;i++) {
-            if (this.goods[i].id_product==id){
-                console.log(this.goods[i].id_product);
-                return i+1;
-            }
-        }
-        return false;
-    }
-
-    
-
-    cardUpdate() {
-        let bascket = document.querySelector(this.container);
-        bascket.replaceChildren();
-        //console.log(this.goods);
-        for (let item of this.goods) {
-            bascket.innerHTML += item.render();
-            
-        }
-    }
-
-    _init() {
-
-        document.querySelector('.btn-cart').addEventListener('click', () => {
-            //console.log('basket pressed')
-            document.querySelector(this.container).classList.toggle('invisible');
-        });
-
-        document.querySelector('.cart-block').addEventListener('click', pressed => {
-            if (pressed.target.classList.contains('del-btn')) {
-                let id = pressed.target.getAttribute('data-id');
-                console.log(`will delete one ${this.find(id)}`);
-                this.removeItem(this.find(id));
-            }
-        });
-    }
-}
-
-
-//Покажем
-
-//let list = new ProductList(container='.products',url=API_all);//'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses/catalogData.json');
-let card = new Card();
-let list = new ProductList(card)
+})
