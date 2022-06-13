@@ -19,6 +19,7 @@ const app = new Vue({
                     console.log(error);
                 })
         },
+        //накидаем в корзину
         addProduct(product){
             console.log(product.id_product);
          }
@@ -34,6 +35,7 @@ const app = new Vue({
                    this.products.push(el);
                }
            });
+        //загрузка с локального файла
         this.getJson(`getProducts.json`)
             .then(data => {
                 for(let el of data){
