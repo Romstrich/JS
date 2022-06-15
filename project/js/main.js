@@ -25,7 +25,7 @@ const app = new Vue({
         },
         //накидаем в корзину
         addProduct(item){
-            console.log(item);
+            console.log(item.id_product);
 
             let find = this.cartItems.find(el => el.id_product === item.id_product);
             if(find){
