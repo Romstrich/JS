@@ -34,9 +34,19 @@ const app = new Vue({
                 let new_product=Object.assign({quantity:1},item);
                 this.cartItems.push(new_product);
             }
-         }
         },
         
+        //УДАЛЕНИЕ ИЗ КОРЗИНКИ
+        remove(item){
+            console.log('УДООЛЯТЬ');
+            // if(item.quantity>1){
+            //     item.quantity--;
+            // } else {
+            //     this.cartItems.splice(this.cartItems.indexOf(item), 1);
+            // }
+              
+        },
+    },    
 
     mounted(){
         //метод отработки после загрузки приложения
