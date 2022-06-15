@@ -25,13 +25,13 @@ const app = new Vue({
         },
         //накидаем в корзину
         addProduct(item){
-            console.log(item.id_product);
+            console.log(item);
 
             let find = this.cartItems.find(el => el.id_product === item.id_product);
             if(find){
-                ;
+                find.quantity+=1;
             }else{
-                let new_product=Object.assign({quantity:1,item});
+                let new_product=Object.assign({quantity:1},item);
                 this.cartItems.push(new_product);
             }
          }
