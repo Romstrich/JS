@@ -39,12 +39,18 @@ const app = new Vue({
         //УДАЛЕНИЕ ИЗ КОРЗИНКИ
         remove(item){
             console.log('УДООЛЯТЬ');
-            // if(item.quantity>1){
-            //     item.quantity--;
-            // } else {
-            //     this.cartItems.splice(this.cartItems.indexOf(item), 1);
-            // }
+            if(item.quantity>1){
+                item.quantity--;
+            } else {
+                this.cartItems.splice(this.cartItems.indexOf(item), 1);
+            }
               
+        },
+
+        //фильтр
+        filter(){
+            let regexp = new RegExp(this.userSearch, 'i');
+            this.filtered =  this.products.filter(el => regexp.test(el.product_name));
         },
     },    
 
@@ -55,6 +61,7 @@ const app = new Vue({
            .then(data => {
                for(let el of data){
                    this.products.push(el);
+                   this.filtered.push(el);
                }
            });
         //загрузка с локального файла
@@ -62,6 +69,7 @@ const app = new Vue({
             .then(data => {
                 for(let el of data){
                     this.products.push(el);
+                    this.filtered.push(el);
                 }
             })
         //подгрузим корзину
