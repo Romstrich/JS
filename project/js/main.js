@@ -9,7 +9,7 @@ const app = new Vue({
         filtered: [],
         imgCatalog: 'https://via.placeholder.com/200x150',
         userSearch: '',
-        show: false
+        showCart: false,
     },
     methods: {
         getJson(url){//подрузка файла, как раньше, только теперь с гитахаба
@@ -22,6 +22,7 @@ const app = new Vue({
         //накидаем в корзину
         addProduct(product){
             console.log(product.id_product);
+           
          }
         },
         
