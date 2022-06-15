@@ -10,6 +10,10 @@ const app = new Vue({
         imgCatalog: 'https://via.placeholder.com/200x150',
         userSearch: '',
         showCart: false,
+        //Корзина
+        imgCart: 'https://via.placeholder.com/50x100',
+        cartUrl: '/getBasket.json',
+        cartItems: [],
     },
     methods: {
         getJson(url){//подрузка файла, как раньше, только теперь с гитахаба
@@ -20,9 +24,16 @@ const app = new Vue({
                 })
         },
         //накидаем в корзину
-        addProduct(product){
-            console.log(product.id_product);
-           
+        addProduct(item){
+            console.log(item.id_product);
+
+            let find = this.cartItems.find(el => el.id_product === item.id_product);
+            if(find){
+                ;
+            }else{
+                let new_product=Object.assign({quantity:1,item});
+                this.cartItems.push(new_product);
+            }
          }
         },
         
@@ -43,5 +54,12 @@ const app = new Vue({
                     this.products.push(el);
                 }
             })
+        //подгрузим корзину
+        this.getJson(`${API + this.cartUrl}`)
+        .then(data => {
+            for (let item of data.contents){
+                this.cartItems.push(item);
+            }
+        });
     }
 })

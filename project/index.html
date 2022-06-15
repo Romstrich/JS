@@ -19,7 +19,9 @@
             </form>
             <button class="btn-cart" type="button" @click="showCart = !showCart">Корзина</button>
             <div class="cart-block" v-show="showCart">
-                <p>lkjlklkjlkjjasd</p>
+                <div class="cart-item" v-for="item of cartItems" :key="item.id_product">
+                    <p>{{item.id_product}}</p>
+                </div>
             </div>
         </div>
     </header>
