@@ -11,12 +11,12 @@
     <header>
         <div class="logo">E-shop</div>
         <div class="cart">
-            <form action="#" class="search-form" @submit.prevent="filter">
+            <!-- <form action="#" class="search-form" @submit.prevent="filter">
                 <input type="text" class="search-field" v-model="userSearch">
                 <button class="btn-search" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
-            </form>
+            </form> -->
             <button class="btn-cart" type="button" @click="showCart = !showCart">Корзина</button>
             <div class="cart-block" v-show="showCart">
                 <div class="cart-item" v-for="item of cartItems" :key="item.id_product">
