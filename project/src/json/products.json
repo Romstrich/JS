@@ -1,0 +1,25 @@
+[
+ {  "id_product": 1,
+    "product_name": "Notebook",
+    "price": 2000,
+    "img": "src/img/noutbuk.jpg"
+ },
+ {  "id_product": 2, 
+    "product_name": "Mouse",
+    "price": 20,
+    "img": "src/img/mouse.jpg"
+ },
+ {  "id_product": 3, 
+    "product_name": "Keyboard", 
+    "price": 200, 
+    "img": "src/img/keyboard.jpg"
+ },
+ {  "id_product": 4, 
+    "product_name": "Gamepad",
+    "price": 50, 
+    "img": "src/img/gamepad.jpg" 
+ },
+ {  "id_product": 5, 
+    "product_name": "Без рисунка", 
+    "price": 50 }
+]
