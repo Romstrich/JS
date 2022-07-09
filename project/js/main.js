@@ -11,8 +11,7 @@ const app = new Vue({
         filtered: [],
         imgCart: 'https://placehold.it/50x100',
         products: [],
-        imgProduct: 'https://placehold.it/200x150',
-        error:false
+        imgProduct: 'https://placehold.it/200x150'
     },
     methods: {
         getJson(url){
@@ -75,4 +74,5 @@ const app = new Vue({
     }
 
 });
+
 
